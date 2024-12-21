@@ -1,6 +1,6 @@
 ﻿using BankApp;
 Utility.PrintTitle();
-List<int> cards = Utility.GenerateCardsAmount();
+List<int> cards = Utility.GenerateCardsAmount(5); 
 List<Account> accounts = Utility.GenerateAccounts(cards, 5);
 while(true)
 {

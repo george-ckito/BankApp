@@ -12,7 +12,7 @@ namespace BankApp
         public bool T = true;
         public CreditCard(Account owner) : base(owner)
         {
-            this.CreditScore = new Random().Next(1000);
+            CreditScore = new Random().Next(1000);
         }
         public override void Print()
         {

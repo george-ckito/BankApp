@@ -44,10 +44,10 @@ namespace BankApp
                 }
             }
         }
-        public static List<int> GenerateCardsAmount()
+        public static List<int> GenerateCardsAmount(int count)
         {
             List<int> cards = new List<int>();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < count; i++)
             {
                 cards.Add(new Random().Next(1, 4));
             }
@@ -66,35 +66,52 @@ namespace BankApp
             switch (option)
             {
                 case 1:
-                    Console.Write("Choose account to transfer from: ");
-                    int fromAccount = int.Parse(Console.ReadLine()) - 1;
-                    Console.WriteLine("\nChoose the card to transfer from");
-                    accounts[fromAccount].PrintCards();
-                    int fromCard = int.Parse(Console.ReadLine()) - 1;
-                    Console.Write("\nChoose account to transfer to: ");
-                    int toAccount = int.Parse(Console.ReadLine()) - 1;
-                    Console.WriteLine("\nChoose the card to transfer to");
-                    accounts[toAccount].PrintCards();
-                    int toCard = int.Parse(Console.ReadLine()) - 1;
-                    Console.Write("\nEnter amount to transfer: ");
-                    decimal amount = decimal.Parse(Console.ReadLine());
-                    if (accounts[fromAccount].Transfer(accounts[fromAccount].getCard(fromCard),accounts[toAccount], accounts[toAccount].getCard(toCard), amount))
+                    try
                     {
+                        Console.Write("Choose account to transfer from: ");
+                        int fromAccount = int.Parse(Console.ReadLine()) - 1;
+                        Console.WriteLine("\nChoose the card to transfer from");
+                        accounts[fromAccount].PrintCards();
+                        int fromCard = int.Parse(Console.ReadLine()) - 1;
+                        Console.Write("\nChoose account to transfer to: ");
+                        int toAccount = int.Parse(Console.ReadLine()) - 1;
+                        Console.WriteLine("\nChoose the card to transfer to");
+                        accounts[toAccount].PrintCards();
+                        int toCard = int.Parse(Console.ReadLine()) - 1;
+                        Console.Write("\nEnter amount to transfer: ");
+                        decimal amount = decimal.Parse(Console.ReadLine());
+                        accounts[fromAccount].Transfer(accounts[fromAccount].getCard(fromCard), accounts[toAccount], accounts[toAccount].getCard(toCard), amount)
                         Console.WriteLine("\nTransfer successful");
                     }
-                    else
+                    catch (FormatException fex)
                     {
-                        Console.WriteLine("\nTransfer failed");
+                        throw;
                     }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"\nTransfer failed: {e.Message}");
+                    }
+                    
                     break;
                 case 2:
-                    int account = int.Parse(Console.ReadLine()) - 1;
+                    int account;
+                    try
+                    {
+                        account = int.Parse(Console.ReadLine()) - 1;
+                    } catch (FormatException fex) {
+                        throw;
+                    }
                     accounts[account].PrintHistory();
                     break;
                 case 3:
                     Account.PrintUniversalHistory();
                     break;
                 case 4:
+                    Console.WriteLine("Choose account:");
+                    int account1 = int.Parse(Console.ReadLine()) - 1;
+                    accounts[account1].AddCard();
+                    break;
+                case 5:
                     Environment.Exit(0);
                     break;
                 default:

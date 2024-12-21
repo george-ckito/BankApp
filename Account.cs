@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BankApp.Exceptions;
 
 namespace BankApp
 {
@@ -89,27 +90,19 @@ namespace BankApp
                 Console.WriteLine();
             }
         }
-        public bool Transfer(Card fromCard, Account toAccount, Card toCard, decimal amount)
+        public void Transfer(Card fromCard, Account toAccount, Card toCard, decimal amount)
         {
-            if (Blocked)
+            if (Blocked || toAccount.Blocked)
             {
-                return false;
+                throw new AccountBlockedException();
             }
-            if (toAccount.Blocked)
+            if (fromCard.Balance < amount || amount <= 0)
             {
-                return false;
-            }
-            if (fromCard.Balance < amount)
-            {
-                return false;
-            }
-            if (amount <= 0)
-            {
-                return false;
+                throw new InvalidTransferAmountException();
             }
             if (fromCard == toCard)
             {
-                return false;
+                throw new Exception("You can't transfer money to the same card!");
             }
             Balance -= amount;
             fromCard.Balance -= amount;
@@ -123,7 +116,6 @@ namespace BankApp
             transaction.amount = amount;
             History.Add(transaction);
             UniversalHistory.Add(transaction);
-            return true;
         }
         public void PrintHistory()
         {

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BankApp
 {
-    internal class Card
+    internal abstract class Card
     {
-        private static Random rand = new Random();
+        protected static Random rand = new Random();
         public string Number { get; set; }
         public string CVV { get; set; }
         public string ExpirationDate { get; set; }
